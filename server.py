@@ -7,7 +7,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'myflasksecret'
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-# 🔐 Must match frontend
 SECRET_KEY = "mysecretkey12345"  # 16 bytes
 BLOCK_SIZE = 16
 
@@ -37,18 +36,14 @@ def handle_message(encrypted_msg):
         print(f"Encrypted message received: {encrypted_msg}")
         print(f"Decrypted message: {decrypted_msg}")
 
-        '''if decrypted_msg:
-            print(f"User says: {decrypted_msg}")
-            global last_user_message
-            last_user_message = decrypted_msg'''
+        
 
     except Exception as e:
-        # Ignore unencrypted or malformed messages
         print(f"Decryption error (ignored): {e}")
 
 def send_server_messages():
     while True:
-        msg = input("You (server): ")
+        msg = input("(server): ")
         if msg.strip():
             encrypted = encrypt_message(f"Bot: {msg}")
             socketio.emit('message', encrypted)
