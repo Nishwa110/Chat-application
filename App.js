@@ -1,4 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react"; 
+/* usestate is used to store values */
+/* useeffect is used to manage background logic */
+/* UseRef: */
 import io from "socket.io-client";
 import CryptoJS from "crypto-js";
 
@@ -65,14 +68,13 @@ function ChatApp() {
     socket.send(encryptedMsg);
 
     setMessages((prev) => [...prev, { 
-      from: "you", 
+
       text: message,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }]);
     setMessage("");
   };
 
-  // 🌸 Dynamic container styling fix (no cutting UI)
   const getContainerStyles = () => {
     const baseTopPadding = windowHeight < 600 ? 16 : windowWidth < 480 ? 20 : 28;
 
@@ -81,11 +83,11 @@ function ChatApp() {
       boxShadow: "0 8px 32px rgba(126, 108, 142, 0.12)",
       border: "1px solid rgba(255, 255, 255, 0.8)",
       position: "relative",
-      overflow: "visible",        // ✅ important fix
+      overflow: "visible",       
       boxSizing: "border-box",
       background: "linear-gradient(135deg, #f9f6fb 0%, #f0eaf8 100%)",
       borderRadius: "24px",
-      paddingTop: baseTopPadding  // ✅ dynamic padding
+      paddingTop: baseTopPadding  
     };
 
     if (windowHeight < 600 || windowWidth < 480) {
@@ -132,11 +134,11 @@ function ChatApp() {
   return (
     <div ref={containerRef} style={containerStyles}>
 
-      {/*  Decorative circles - repositioned dynamically */}
+   
 
       <div style={{
         position: "absolute",
-        top: windowHeight < 600 ? -40 : windowWidth < 480 ? -60 : -75,  // ✅ moved more up
+        top: windowHeight < 600 ? -40 : windowWidth < 480 ? -60 : -75,  
         right: windowHeight < 600 ? -30 : windowWidth < 480 ? -40 : -50,
         width: windowHeight < 600 ? 60 : windowWidth < 480 ? 80 : 100,
         height: windowHeight < 600 ? 60 : windowWidth < 480 ? 80 : 100,
