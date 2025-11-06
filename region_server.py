@@ -1,17 +1,9 @@
-# backend/region_server.py
-# Run this file with an argument: region name and port
-# Example: python region_server.py asia 5001
-
-import sys
+import sys #helps system to read command line instructions like port number
 from flask import Flask
-from flask_socketio import SocketIO, send
+from flask_socketio import SocketIO, send #send helps to send messages.
 
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="*")
-
-@app.route('/')
-def index():
-    return "Region server running"
+socketio = SocketIO(app, cors_allowed_origins="*") #CORS = cross over resource sharing, it allows communication from all over the world.
 
 @socketio.on('message')
 def handle_message(msg):
