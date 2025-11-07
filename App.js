@@ -1,7 +1,4 @@
 import { useState, useEffect, useRef } from "react"; 
-/* usestate is used to store values */
-/* useeffect is used to manage background logic */
-/* UseRef: */
 import io from "socket.io-client";
 import CryptoJS from "crypto-js";
 
@@ -15,6 +12,21 @@ function ChatApp() {
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
   const messagesEndRef = useRef(null);
   const containerRef = useRef(null);
+
+  // ✅ Load previous chat history from localStorage on startup
+  useEffect(() => {
+    const savedChats = localStorage.getItem("chatHistory");
+    if (savedChats) {
+      setMessages(JSON.parse(savedChats));
+    }
+  }, []);
+
+  // ✅ Save updated chat history to localStorage
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem("chatHistory", JSON.stringify(messages));
+    }
+  }, [messages]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -68,11 +80,16 @@ function ChatApp() {
     socket.send(encryptedMsg);
 
     setMessages((prev) => [...prev, { 
-
+      from: "you",
       text: message,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }]);
     setMessage("");
+  };
+
+  const clearChat = () => {
+    localStorage.removeItem("chatHistory");
+    setMessages([]);
   };
 
   const getContainerStyles = () => {
@@ -133,9 +150,6 @@ function ChatApp() {
 
   return (
     <div ref={containerRef} style={containerStyles}>
-
-   
-
       <div style={{
         position: "absolute",
         top: windowHeight < 600 ? -40 : windowWidth < 480 ? -60 : -75,  
@@ -158,7 +172,6 @@ function ChatApp() {
         opacity: 0.3
       }} />
 
-      {/* ---- UI Below unchanged ---- */}
       <div style={{ position: "relative", zIndex: 2 }}>
         <div style={{ textAlign: "center", marginBottom: getTopMargin() }}>
           <h2 style={{
@@ -169,7 +182,7 @@ function ChatApp() {
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent"
           }}>
-           Chat
+            Chat
           </h2>
           <div style={{ fontSize: windowHeight < 600 ? "10px" : windowWidth < 480 ? "11px" : "12px", color: "#b8a9cc" }}>
             reliable & Secure Messaging
@@ -231,6 +244,17 @@ function ChatApp() {
           >
             ➤ Send
           </button>
+        </div>
+
+        {/* ✅ Clear chat button */}
+        <div style={{ textAlign:"center", marginTop:"12px" }}>
+          <button onClick={clearChat} style={{
+            background:"none",
+            border:"none",
+            color:"#9b88b1",
+            fontSize:"12px",
+            cursor:"pointer"
+          }}>Clear Chat History</button>
         </div>
       </div>
     </div>
